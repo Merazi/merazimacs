@@ -1,6 +1,6 @@
-→ VANILLA MERAZIMACS ←
+# VANILLA MERAZIMACS
 
-What is this?
+## What is this?
   Thsi is my configuration file for GNU Emacs, but with a twist:
   I'm *not* allowed to use anything from Melpa, even tho *Melpa packages
   are great*, I want to do this for *educational purposes only*.
