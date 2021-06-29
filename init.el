@@ -42,6 +42,9 @@
 ;; delete selected text
 (delete-selection-mode 1)
 
+;; enable ido mode, i'm a bit lazy when typing capital letters
+(ido-mode 1)
+
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
 
@@ -59,6 +62,8 @@
   (load-file (concat user-emacs-directory "init.el")))
 
 ;; Key bindings
-(global-set-key "\C-cs" 'eshell)
+(global-set-key "\C-xb" 'ibuffer)
 (global-set-key "\C-ce" 'eww)
+(global-set-key "\C-cs" 'eshell)
+(global-set-key "\C-ck" 'kill-emacs)
 (global-set-key "\C-cr" 'mer/reload-config)
