@@ -27,6 +27,10 @@
 ;; show pairs () []
 (show-paren-mode 1)
 
+;; show line numbers and column numbers in the modeline
+(line-number-mode 1)
+(column-number-mode 1)
+
 ;; buffer name = window name
 (setq frame-title-format '("%b"))
 
@@ -61,9 +65,27 @@
   (interactive)
   (load-file (concat user-emacs-directory "init.el")))
 
+(defun mer/prepare-dired ()
+  "This function load additional modes for dired."
+  (dired-hide-details-mode 1))
+
 ;; Key bindings
 (global-set-key "\C-xb" 'ibuffer)
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
 (global-set-key "\C-ck" 'kill-emacs)
 (global-set-key "\C-cr" 'mer/reload-config)
+
+;; Emacs Web Wowser configuration
+(setq eww-download-directory "/home/merazi/Downloads/"
+      eww-desktop-remove-duplicates t
+      eww-history-limit 20
+      eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
+
+;; Gud configuration (just for guiler)
+(setq gud-guiler-command-name "guile --no-auto-compile")
+
+;; Dired configuration
+(add-hook 'dired-mode-hook 'mer/prepare-dired)
+(setq dired-hide-details-hide-symlink-targets t
+      dired-listing-switches "-laF")
