@@ -31,7 +31,7 @@
 (line-number-mode 1)
 (column-number-mode 1)
 
-;; set the fringe balue
+;; set the fringe value
 (set-fringe-mode 2)
 
 ;; buffer name = window name
