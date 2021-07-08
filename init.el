@@ -15,7 +15,7 @@
 ;; 6. I can use elisp functions made by myself.
 
 ;; add some contrast to the selected text background color
-(set-face-attribute 'region nil :background "#aaa")
+(set-face-attribute 'region nil :background "#667")
 
 ;; display color emojis
 (set-fontset-font t '(#x1f000 . #x1faff)
@@ -31,11 +31,14 @@
 (line-number-mode 1)
 (column-number-mode 1)
 
+;; set the fringe balue
+(set-fringe-mode 2)
+
 ;; buffer name = window name
 (setq frame-title-format '("%b"))
 
-;; i don't like blinking cursors
-(blink-cursor-mode -1)
+;; i like blinking cursors
+(blink-cursor-mode 1)
 
 ;; use y-n instead of yes-no in prompts
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -74,6 +77,7 @@
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
 (global-set-key "\C-ck" 'kill-emacs)
+(global-set-key "\C-ci" 'info)
 (global-set-key "\C-cr" 'mer/reload-config)
 
 ;; Emacs Web Wowser configuration
@@ -89,3 +93,6 @@
 (add-hook 'dired-mode-hook 'mer/prepare-dired)
 (setq dired-hide-details-hide-symlink-targets t
       dired-listing-switches "-laF")
+
+;; Org-Export to LaTeX cofiguration
+(setq org-latex-toc-command "\\tableofcontents \\clearpage")
