@@ -17,6 +17,9 @@
 ;; add some contrast to the selected text background color
 (set-face-attribute 'region nil :background "#667")
 
+;; set the default font
+(set-frame-font "Ubuntu Mono-12" nil t)
+
 ;; display color emojis
 (set-fontset-font t '(#x1f000 . #x1faff)
 		  (font-spec :family "Noto Color Emoji"))
@@ -50,7 +53,10 @@
 (delete-selection-mode 1)
 
 ;; enable ido mode, i'm a bit lazy when typing capital letters
-(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(require 'ido)
+(ido-mode t)
 
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
@@ -67,10 +73,6 @@
   "This function will reload my configuration file."
   (interactive)
   (load-file (concat user-emacs-directory "init.el")))
-
-(defun mer/prepare-dired ()
-  "This function load additional modes for dired."
-  (dired-hide-details-mode 1))
 
 ;; Key bindings
 (global-set-key "\C-xb" 'ibuffer)
@@ -90,9 +92,11 @@
 (setq gud-guiler-command-name "guile --no-auto-compile")
 
 ;; Dired configuration
-(add-hook 'dired-mode-hook 'mer/prepare-dired)
 (setq dired-hide-details-hide-symlink-targets t
       dired-listing-switches "-laF")
 
 ;; Org-Export to LaTeX cofiguration
+(require 'ox-latex)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
+;; Org-mode fold character
+(setq org-ellipsis "⤵")
