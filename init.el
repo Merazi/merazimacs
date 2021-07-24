@@ -14,11 +14,18 @@
 ;; 5. I do not want to remove GUI elements like the top menu.
 ;; 6. I can use elisp functions made by myself.
 
-;; add some contrast to the selected text background color
-(set-face-attribute 'region nil :background "#667")
+;; performance tweaks (from sanemacs)
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(add-hook 'after-init-hook #'(lambda ()
+			       ;; restore after startup
+			       (setq gc-cons-threshold 800000)))
 
-;; set the default font
-(set-frame-font "Ubuntu Mono-12" nil t)
+;; since I'm not downloading a lot of packages i'll turn package.el off
+(setq package-enable-at-startup nil)
+
+;; add some contrast to the selected text background color
+(set-face-attribute 'region nil :background "#777")
 
 ;; display color emojis
 (set-fontset-font t '(#x1f000 . #x1faff)
@@ -55,8 +62,10 @@
 ;; enable ido mode, i'm a bit lazy when typing capital letters
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
-(require 'ido)
 (ido-mode t)
+
+;; highlight the current line
+(global-hl-line-mode t)
 
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
@@ -65,38 +74,64 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
+;; auto update the buffer if the file has changed on disk
+(global-auto-revert-mode t)
+
 ;; keep the custom code out of my init file
 (setq custom-file (make-temp-file "emacs-custom"))
 
-;; Some user defined functions
+;; some user defined functions
 (defun mer/reload-config ()
   "This function will reload my configuration file."
   (interactive)
   (load-file (concat user-emacs-directory "init.el")))
 
-;; Key bindings
-(global-set-key "\C-xb" 'ibuffer)
+(defun mer/edit-config ()
+  "Easy access to my emacs config."
+  (interactive)
+  (find-file user-init-file))
+
+(defun mer/show-full-file-path ()
+  "This function allows me to see the path of the buffer I'm editing"
+  (interactive)
+  (message buffer-file-name))
+
+;; some hotkeys
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
 (global-set-key "\C-ck" 'kill-emacs)
-(global-set-key "\C-ci" 'info)
-(global-set-key "\C-cr" 'mer/reload-config)
+(global-set-key "\C-xb" 'buffer-menu)
+(global-set-key "\C-cc" 'mer/edit-config)
+(global-set-key "\C-cq" 'mer/reload-config)
+(global-set-key "\C-cf" 'mer/show-full-file-path)
 
-;; Emacs Web Wowser configuration
+;; eww (the web browser)
 (setq eww-download-directory "/home/merazi/Downloads/"
       eww-desktop-remove-duplicates t
       eww-history-limit 20
       eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
 
-;; Gud configuration (just for guiler)
+;; set the default guile command
 (setq gud-guiler-command-name "guile --no-auto-compile")
 
-;; Dired configuration
+;; dired
 (setq dired-hide-details-hide-symlink-targets t
       dired-listing-switches "-laF")
 
-;; Org-Export to LaTeX cofiguration
+;; org-export to latex
 (require 'ox-latex)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
 ;; Org-mode fold character
-(setq org-ellipsis "⤵")
+(setq org-ellipsis "↓")
+
+;; my simple modeline configuration
+(set-face-attribute 'mode-line nil
+		    :background "#eee"
+		    :foreground "#444"
+		    :overline nil
+		    :underline nil)
+(set-face-attribute 'mode-line-inactive nil
+		    :background "#fff"
+		    :foreground "#aaa"
+		    :overline nil
+		    :underline nil)
