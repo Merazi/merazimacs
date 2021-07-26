@@ -59,11 +59,6 @@
 ;; delete selected text
 (delete-selection-mode 1)
 
-;; enable ido mode, i'm a bit lazy when typing capital letters
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode t)
-
 ;; highlight the current line
 (global-hl-line-mode t)
 
@@ -84,7 +79,7 @@
 (defun mer/reload-config ()
   "This function will reload my configuration file."
   (interactive)
-  (load-file (concat user-emacs-directory "init.el")))
+  (load-file user-init-file))
 
 (defun mer/edit-config ()
   "Easy access to my emacs config."
