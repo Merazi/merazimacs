@@ -2,6 +2,7 @@
 ;; Hello everybody! This is my init file but with a twist:
 ;; I'm trying to be as default as possible when using Emacs.
 ;; So I made some rules for myself:
+;;
 ;; 1. I can only use packages from GNU Elpa, Melpa is banned.
 ;;    (Just because it is not added by default, Melpa is cool)
 ;; 2. I won't use any pre-made themes, if I want a theme I will
@@ -21,11 +22,24 @@
 			       ;; restore after startup
 			       (setq gc-cons-threshold 800000)))
 
+;; increases garbage collection during startup
+;; copied from: https://pastebin.com/mrPsnUas
+(setq startup/gc-cons-threshold gc-cons-threshold)
+(setq gc-cons-threshold most-positive-fixnum)
+(defun startup/reset-gc ()
+  (setq gc-cons-threshold startup/gc-cons-threshold))
+(add-hook 'emacs-startup-hook 'startup/reset-gc)
+
 ;; since I'm not downloading a lot of packages i'll turn package.el off
 (setq package-enable-at-startup nil)
 
-;; add some contrast to the selected text background color
-(set-face-attribute 'region nil :background "#777")
+;; this is my “color scheme”
+(set-face-attribute 'region nil :background "#bcf")
+(set-background-color "#fff")
+(set-foreground-color "#000")
+
+;; a monospaced font
+(set-frame-font "DejaVu Sans Mono-11")
 
 ;; display color emojis
 (set-fontset-font t '(#x1f000 . #x1faff)
@@ -59,9 +73,6 @@
 ;; delete selected text
 (delete-selection-mode 1)
 
-;; highlight the current line
-(global-hl-line-mode t)
-
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
 
@@ -91,11 +102,19 @@
   (interactive)
   (message buffer-file-name))
 
+(defun mer/xdg-open ()
+  "Open dired file with external program."
+  (interactive)
+  (setq file (dired-get-file-for-visit))
+  (shell-command (concat "xdg-open " (shell-quote-argument file))))
+
+
 ;; some hotkeys
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
 (global-set-key "\C-ck" 'kill-emacs)
 (global-set-key "\C-xb" 'buffer-menu)
+(global-set-key "\C-co" 'mer/xdg-open)
 (global-set-key "\C-cc" 'mer/edit-config)
 (global-set-key "\C-cq" 'mer/reload-config)
 (global-set-key "\C-cf" 'mer/show-full-file-path)
@@ -117,7 +136,7 @@
 (require 'ox-latex)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
 ;; Org-mode fold character
-(setq org-ellipsis "↓")
+(setq org-ellipsis "···")
 
 ;; my simple modeline configuration
 (set-face-attribute 'mode-line nil
@@ -130,3 +149,16 @@
 		    :foreground "#aaa"
 		    :overline nil
 		    :underline nil)
+
+;; I'm using org-present for giving presentations inside emacs
+(add-to-list 'load-path "~/.config/emacs/plugins/")
+(require 'org-present)
+(add-hook 'org-present-mode-hook
+	  (lambda ()
+	    (org-present-big)
+	    (org-display-inline-images)))
+
+(add-hook 'org-present-mode-quit-hook
+	  (lambda ()
+	    (org-present-small)
+	    (org-remove-inline-images)))
