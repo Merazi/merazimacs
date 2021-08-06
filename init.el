@@ -39,11 +39,14 @@
 (set-foreground-color "#000")
 
 ;; a monospaced font
-(set-frame-font "DejaVu Sans Mono-11")
+;; (set-frame-font "DejaVu Sans Mono-11")
 
 ;; display color emojis
 (set-fontset-font t '(#x1f000 . #x1faff)
 		  (font-spec :family "Noto Color Emoji"))
+
+;; silence please
+(setq visible-bell 1)
 
 ;; auto complete pairs () []
 (electric-pair-mode 1)
@@ -149,16 +152,3 @@
 		    :foreground "#aaa"
 		    :overline nil
 		    :underline nil)
-
-;; I'm using org-present for giving presentations inside emacs
-(add-to-list 'load-path "~/.config/emacs/plugins/")
-(require 'org-present)
-(add-hook 'org-present-mode-hook
-	  (lambda ()
-	    (org-present-big)
-	    (org-display-inline-images)))
-
-(add-hook 'org-present-mode-quit-hook
-	  (lambda ()
-	    (org-present-small)
-	    (org-remove-inline-images)))
