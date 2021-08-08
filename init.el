@@ -67,11 +67,11 @@
 ;; i like blinking cursors
 (blink-cursor-mode 1)
 
-;; use y-n instead of yes-no in prompts
-(fset 'yes-or-no-p 'y-or-n-p)
-
 ;; clean whitespace after saving
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; use y or n instead of yes or no
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; delete selected text
 (delete-selection-mode 1)
@@ -110,7 +110,6 @@
   (interactive)
   (setq file (dired-get-file-for-visit))
   (shell-command (concat "xdg-open " (shell-quote-argument file))))
-
 
 ;; some hotkeys
 (global-set-key "\C-ce" 'eww)
