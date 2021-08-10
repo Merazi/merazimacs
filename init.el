@@ -35,8 +35,10 @@
 
 ;; this is my “color scheme”
 (set-face-attribute 'region nil :background "#bcf")
-(set-background-color "#fff")
-(set-foreground-color "#000")
+
+;; i am using my theme's background color
+;; (set-background-color "#fff") ; white
+;; (set-foreground-color "#000") ; black
 
 ;; a monospaced font
 ;; (set-frame-font "DejaVu Sans Mono-11")
@@ -114,12 +116,18 @@
 ;; some hotkeys
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
+(global-set-key "\C-xb" 'ibuffer)
 (global-set-key "\C-ck" 'kill-emacs)
-(global-set-key "\C-xb" 'buffer-menu)
 (global-set-key "\C-co" 'mer/xdg-open)
 (global-set-key "\C-cc" 'mer/edit-config)
 (global-set-key "\C-cq" 'mer/reload-config)
 (global-set-key "\C-cf" 'mer/show-full-file-path)
+
+;; ibuffer customizations
+(setq ibuffer-always-show-last-buffer t
+      ibuffer-case-fold-search t
+      ibuffer-use-header-line t
+      ibuffer-truncate-lines nil)
 
 ;; eww (the web browser)
 (setq eww-download-directory "/home/merazi/Downloads/"
@@ -137,17 +145,18 @@
 ;; org-export to latex
 (require 'ox-latex)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
+
 ;; Org-mode fold character
-(setq org-ellipsis "···")
+(setq org-ellipsis "⤷")
 
 ;; my simple modeline configuration
-(set-face-attribute 'mode-line nil
-		    :background "#eee"
-		    :foreground "#444"
+ (set-face-attribute 'mode-line nil
+		    :background "#444"
+		    :foreground "#eee"
 		    :overline nil
 		    :underline nil)
-(set-face-attribute 'mode-line-inactive nil
-		    :background "#fff"
-		    :foreground "#aaa"
+ (set-face-attribute 'mode-line-inactive nil
+		    :background "#aaa"
+		    :foreground "#fff"
 		    :overline nil
 		    :underline nil)
