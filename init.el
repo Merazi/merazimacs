@@ -36,13 +36,6 @@
 ;; this is my “color scheme”
 (set-face-attribute 'region nil :background "#bcf")
 
-;; i am using my theme's background color
-;; (set-background-color "#fff") ; white
-;; (set-foreground-color "#000") ; black
-
-;; a monospaced font
-;; (set-frame-font "DejaVu Sans Mono-11")
-
 ;; display color emojis
 (set-fontset-font t '(#x1f000 . #x1faff)
 		  (font-spec :family "Noto Color Emoji"))
@@ -124,10 +117,14 @@
 (global-set-key "\C-cf" 'mer/show-full-file-path)
 
 ;; ibuffer customizations
-(setq ibuffer-always-show-last-buffer t
+(setq ibuffer-always-show-last-buffer nil
       ibuffer-case-fold-search t
       ibuffer-use-header-line t
-      ibuffer-truncate-lines nil)
+      ibuffer-truncate-lines nil
+      ibuffer-default-shrink-to-minimum-size t
+      ibuffer-display-summary nil
+      ibuffer-view-ibuffer nil
+      ibuffer-use-header-line t)
 
 ;; eww (the web browser)
 (setq eww-download-directory "/home/merazi/Downloads/"
@@ -140,23 +137,23 @@
 
 ;; dired
 (setq dired-hide-details-hide-symlink-targets t
-      dired-listing-switches "-laF")
+      dired-listing-switches "-lhFa --color=auto")
 
 ;; org-export to latex
 (require 'ox-latex)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
 
 ;; Org-mode fold character
-(setq org-ellipsis "⤷")
+(setq org-ellipsis "...")
 
 ;; my simple modeline configuration
  (set-face-attribute 'mode-line nil
-		    :background "#444"
-		    :foreground "#eee"
+		    :background "#eee"
+		    :foreground "#444"
 		    :overline nil
 		    :underline nil)
  (set-face-attribute 'mode-line-inactive nil
-		    :background "#aaa"
-		    :foreground "#fff"
+		    :background "#fff"
+		    :foreground "#aaa"
 		    :overline nil
 		    :underline nil)
