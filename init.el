@@ -54,7 +54,7 @@
 (column-number-mode 1)
 
 ;; set the fringe value
-(set-fringe-mode 2)
+(set-fringe-mode '(10 . 5))
 
 ;; buffer name = window name
 (setq frame-title-format '("%b"))
@@ -109,22 +109,12 @@
 ;; some hotkeys
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
-(global-set-key "\C-xb" 'ibuffer)
+(global-set-key "\C-xb" 'buffer-menu)
 (global-set-key "\C-ck" 'kill-emacs)
 (global-set-key "\C-co" 'mer/xdg-open)
 (global-set-key "\C-cc" 'mer/edit-config)
 (global-set-key "\C-cq" 'mer/reload-config)
 (global-set-key "\C-cf" 'mer/show-full-file-path)
-
-;; ibuffer customizations
-(setq ibuffer-always-show-last-buffer nil
-      ibuffer-case-fold-search t
-      ibuffer-use-header-line t
-      ibuffer-truncate-lines nil
-      ibuffer-default-shrink-to-minimum-size t
-      ibuffer-display-summary nil
-      ibuffer-view-ibuffer nil
-      ibuffer-use-header-line t)
 
 ;; eww (the web browser)
 (setq eww-download-directory "/home/merazi/Downloads/"
@@ -144,7 +134,7 @@
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
 
 ;; Org-mode fold character
-(setq org-ellipsis "...")
+(setq org-ellipsis "▼")
 
 ;; my simple modeline configuration
  (set-face-attribute 'mode-line nil
