@@ -36,9 +36,9 @@
 ;; this is my “color scheme”
 (set-face-attribute 'region nil :background "#bcf")
 
-;; display color emojis
+;; display color emojis using a special font
 (set-fontset-font t '(#x1f000 . #x1faff)
-		  (font-spec :family "Noto Color Emoji"))
+		  (font-spec :family "JoyPixels"))
 
 ;; silence please
 (setq visible-bell 1)
@@ -111,10 +111,14 @@
 (global-set-key "\C-cs" 'eshell)
 (global-set-key "\C-xb" 'buffer-menu)
 (global-set-key "\C-ck" 'kill-emacs)
-(global-set-key "\C-co" 'mer/xdg-open)
 (global-set-key "\C-cc" 'mer/edit-config)
 (global-set-key "\C-cq" 'mer/reload-config)
 (global-set-key "\C-cf" 'mer/show-full-file-path)
+
+
+(eval-after-load "dired"
+  '(progn (define-key dired-mode-map (kbd "M-o") 'other-window)
+	  (define-key dired-mode-map (kbd "\C-co") 'mer/xdg-open)))
 
 ;; eww (the web browser)
 (setq eww-download-directory "/home/merazi/Downloads/"
@@ -137,12 +141,12 @@
 (setq org-ellipsis "▼")
 
 ;; my simple modeline configuration
- (set-face-attribute 'mode-line nil
+(set-face-attribute 'mode-line nil
 		    :background "#eee"
 		    :foreground "#444"
 		    :overline nil
 		    :underline nil)
- (set-face-attribute 'mode-line-inactive nil
+(set-face-attribute 'mode-line-inactive nil
 		    :background "#fff"
 		    :foreground "#aaa"
 		    :overline nil
