@@ -16,29 +16,32 @@
 ;; 6. I can use elisp functions made by myself.
 
 ;; performance tweaks (from sanemacs)
-(setq gc-cons-threshold 100000000)
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-(add-hook 'after-init-hook #'(lambda ()
-			       ;; restore after startup
-			       (setq gc-cons-threshold 800000)))
+;; (setq gc-cons-threshold 100000000)
+;; (setq read-process-output-max (* 1024 1024)) ;; 1mb
+;; (add-hook 'after-init-hook #'(lambda ()
+;;			       ;; restore after startup
+;;			       (setq gc-cons-threshold 800000)))
 
 ;; increases garbage collection during startup
 ;; copied from: https://pastebin.com/mrPsnUas
-(setq startup/gc-cons-threshold gc-cons-threshold)
-(setq gc-cons-threshold most-positive-fixnum)
-(defun startup/reset-gc ()
-  (setq gc-cons-threshold startup/gc-cons-threshold))
-(add-hook 'emacs-startup-hook 'startup/reset-gc)
+;; (setq startup/gc-cons-threshold gc-cons-threshold)
+;; (setq gc-cons-threshold most-positive-fixnum)
+;; (defun startup/reset-gc ()
+;;   (setq gc-cons-threshold startup/gc-cons-threshold))
+;; (add-hook 'emacs-startup-hook 'startup/reset-gc)
 
 ;; since I'm not downloading a lot of packages i'll turn package.el off
 (setq package-enable-at-startup nil)
 
-;; this is my “color scheme”
+;; use an I beam for the cursor
+(modify-all-frames-parameters (list (cons 'cursor-type 'bar)))
+
+;; set the selection background color
 (set-face-attribute 'region nil :background "#bcf")
 
 ;; display color emojis using a special font
 (set-fontset-font t '(#x1f000 . #x1faff)
-		  (font-spec :family "JoyPixels"))
+		  (font-spec :family "Noto Color Emoji"))
 
 ;; silence please
 (setq visible-bell 1)
@@ -96,9 +99,9 @@
   (find-file user-init-file))
 
 (defun mer/show-full-file-path ()
-  "This function allows me to see the path of the buffer I'm editing"
+  "Show the full file name of the current buffer in the minibuffer."
   (interactive)
-  (message buffer-file-name))
+  (message (concat "File path: " (buffer-file-name))))
 
 (defun mer/xdg-open ()
   "Open dired file with external program."
@@ -121,7 +124,7 @@
 	  (define-key dired-mode-map (kbd "\C-co") 'mer/xdg-open)))
 
 ;; eww (the web browser)
-(setq eww-download-directory "/home/merazi/Downloads/"
+(setq eww-download-directory "~/Downloads/"
       eww-desktop-remove-duplicates t
       eww-history-limit 20
       eww-search-prefix "https://lite.duckduckgo.com/lite/?q=")
