@@ -1,78 +1,53 @@
-;; VanillaMerazimacs.el
-;; Hello everybody! This is my init file but with a twist:
-;; I'm trying to be as default as possible when using Emacs.
-;; So I made some rules for myself:
-;;
-;; 1. I can only use packages from GNU Elpa, Melpa is banned.
-;;    (Just because it is not added by default, Melpa is cool)
-;; 2. I won't use any pre-made themes, if I want a theme I will
-;;    create it in this same file.
-;; 3. No literate programming configuration is allowed, I'll use
-;;    the Emacs language directly, and all the comments will be made
-;;    using Emacs' dialect of lisp (using semi colons, like I'm doing
-;;    right now).
-;; 4. I shall not trespass the 80 columns imaginary line.
-;; 5. I do not want to remove GUI elements like the top menu.
-;; 6. I can use elisp functions made by myself.
+;; merazimacs.el
+;; My regular Emacs configuration with batteries included.  For my
+;; vanilla config go to: https://git.sr.ht/~meraz_1/vanilla-merazimacs
 
 ;; performance tweaks (from sanemacs)
-;; (setq gc-cons-threshold 100000000)
-;; (setq read-process-output-max (* 1024 1024)) ;; 1mb
-;; (add-hook 'after-init-hook #'(lambda ()
-;;			       ;; restore after startup
-;;			       (setq gc-cons-threshold 800000)))
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(add-hook 'after-init-hook #'(lambda ()
+			       ;; restore after startup
+			       (setq gc-cons-threshold 800000)))
 
 ;; increases garbage collection during startup
 ;; copied from: https://pastebin.com/mrPsnUas
-;; (setq startup/gc-cons-threshold gc-cons-threshold)
-;; (setq gc-cons-threshold most-positive-fixnum)
-;; (defun startup/reset-gc ()
-;;   (setq gc-cons-threshold startup/gc-cons-threshold))
-;; (add-hook 'emacs-startup-hook 'startup/reset-gc)
+(setq startup/gc-cons-threshold gc-cons-threshold)
+(setq gc-cons-threshold most-positive-fixnum)
+(defun startup/reset-gc ()
+  (setq gc-cons-threshold startup/gc-cons-threshold))
+(add-hook 'emacs-startup-hook 'startup/reset-gc)
 
-;; since I'm not downloading a lot of packages i'll turn package.el off
-(setq package-enable-at-startup nil)
+;; Enable melpa (I missed this)
+(require 'package)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
 
-;; use an I beam for the cursor
-(modify-all-frames-parameters (list (cons 'cursor-type 'bar)))
-
-;; set the selection background color
-(set-face-attribute 'region nil :background "#bcf")
+;; This is only needed once, near the top of the file
+(require 'use-package)
 
 ;; display color emojis using a special font
 (set-fontset-font t '(#x1f000 . #x1faff)
 		  (font-spec :family "Noto Color Emoji"))
 
-;; silence please
-(setq visible-bell 1)
-
-;; auto complete pairs () []
+;; quality of editing tweaks
+(setq visible-bell 1
+      frame-title-format '("GNU Emacs: %b")
+      org-ellipsis "▼")
 (electric-pair-mode 1)
-
-;; show pairs () []
 (show-paren-mode 1)
-
-;; show line numbers and column numbers in the modeline
 (line-number-mode 1)
 (column-number-mode 1)
-
-;; set the fringe value
 (set-fringe-mode '(10 . 5))
-
-;; buffer name = window name
-(setq frame-title-format '("%b"))
-
-;; i like blinking cursors
 (blink-cursor-mode 1)
-
-;; clean whitespace after saving
 (add-hook 'before-save-hook 'whitespace-cleanup)
-
-;; use y or n instead of yes or no
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-;; delete selected text
 (delete-selection-mode 1)
+(global-auto-revert-mode t)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+
+;; use the modus operandi theme (i like it)
+;; (load-theme 'modus-operandi t)
 
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
@@ -80,9 +55,6 @@
 ;; i want my temporary files (~) to be saved in a specific tmp directory
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-;; auto update the buffer if the file has changed on disk
-(global-auto-revert-mode t)
 
 ;; keep the custom code out of my init file
 (setq custom-file (make-temp-file "emacs-custom"))
@@ -117,11 +89,15 @@
 (global-set-key "\C-cc" 'mer/edit-config)
 (global-set-key "\C-cq" 'mer/reload-config)
 (global-set-key "\C-cf" 'mer/show-full-file-path)
-
-
 (eval-after-load "dired"
   '(progn (define-key dired-mode-map (kbd "M-o") 'other-window)
 	  (define-key dired-mode-map (kbd "\C-co") 'mer/xdg-open)))
+
+;; new window resizing
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 ;; eww (the web browser)
 (setq eww-download-directory "~/Downloads/"
@@ -139,18 +115,61 @@
 ;; org-export to latex
 (require 'ox-latex)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
+(add-to-list 'org-latex-packages-alist
+	     '("AUTO" "babel" t ("pdflatex")))
 
-;; Org-mode fold character
-(setq org-ellipsis "▼")
+;; additional org-mode settings
+(setq-default org-src-tab-acts-natively t)
+(setq-default org-src-preserve-indentation t)
+(setq-default org-edit-src-content-indentation 2)
+(setq-default org-adapt-indentation nil)
 
-;; my simple modeline configuration
-(set-face-attribute 'mode-line nil
-		    :background "#eee"
-		    :foreground "#444"
-		    :overline nil
-		    :underline nil)
-(set-face-attribute 'mode-line-inactive nil
-		    :background "#fff"
-		    :foreground "#aaa"
-		    :overline nil
-		    :underline nil)
+;; some packages
+(use-package vala-mode :ensure t)
+(use-package vala-snippets :ensure t)
+(use-package doom-themes :ensure t)
+(use-package simple-modeline :ensure t)
+(use-package yasnippet-snippets :ensure t)
+(use-package counsel :ensure t)
+(use-package swiper :ensure t
+  :config
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (global-set-key "\C-s" 'swiper-isearch)
+  (global-set-key "\C-r" 'swiper-isearch-backward)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+(use-package org-static-blog :ensure t ;; This config is specific to my website
+  :config
+  (setq org-static-blog-publish-title "Merazi's Webpage")
+  (setq org-static-blog-publish-url "https://meraz_1.srht.site/")
+  (setq org-static-blog-publish-directory "~/Projects/meraz_1.srht.site/")
+  (setq org-static-blog-posts-directory "~/Projects/meraz_1.srht.site/posts/")
+  (setq org-static-blog-drafts-directory "~/Projects/meraz_1.srht.site/drafts/")
+  (setq org-static-blog-enable-tags t)
+  (setq org-static-blog-preview-ellipsis "More ▼")
+  (setq org-static-blog-use-preview t)
+  (setq org-static-blog-index-length 3)
+  (setq org-static-blog-preview-link-p t)
+  (setq org-export-with-section-numbers nil)
+
+  ;; <head> section of every page </head>
+  (setq org-static-blog-page-header
+	"<meta name=\"author\" content=\"Merazi\">
+	 <link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />
+	 <link rel=\"icon\" href=\"static/favicon.ico\">")
+
+  ;; <body> section of every page </body>
+  (setq org-static-blog-page-preamble
+	"<div class=\"header\">
+	 <a href=\"https://meraz_1.srht.site\">Home</a>
+	 <a href=\"https://meraz_1.srht.site/archive.html\">Archive</a>
+	 <a href=\"https://meraz_1.srht.site/bookmarks.html\">Bookmarks</a>
+	 <a href=\"https://meraz_1.srht.site/rss.xml\">Feed</a>
+	 </div>")
+
+  ;; home page top elements
+  (setq org-static-blog-index-front-matter
+	"<h1>Welcome to my webpage 😊</h1>
+	 <div class=\"merazi_pfp\"><img src=\"media/merazi.jpg\"></div>\n"))
