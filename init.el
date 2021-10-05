@@ -47,7 +47,8 @@
 (menu-bar-mode -1)
 
 ;; use the modus operandi theme (i like it)
-;; (load-theme 'modus-operandi t)
+(when (display-graphic-p)
+  (load-theme 'tango-dark t))
 
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
@@ -85,7 +86,7 @@
 (global-set-key "\C-ce" 'eww)
 (global-set-key "\C-cs" 'eshell)
 (global-set-key "\C-xb" 'buffer-menu)
-(global-set-key "\C-ck" 'kill-emacs)
+(global-set-key "\C-ck" 'delete-frame)
 (global-set-key "\C-cc" 'mer/edit-config)
 (global-set-key "\C-cq" 'mer/reload-config)
 (global-set-key "\C-cf" 'mer/show-full-file-path)
@@ -127,19 +128,15 @@
 ;; some packages
 (use-package vala-mode :ensure t)
 (use-package vala-snippets :ensure t)
+(use-package skewer-mode :ensure t)
 (use-package doom-themes :ensure t)
 (use-package simple-modeline :ensure t)
 (use-package yasnippet-snippets :ensure t)
-(use-package counsel :ensure t)
-(use-package swiper :ensure t
+;;(use-package counsel :ensure t)
+(use-package org-present :ensure t)
+(use-package web-mode :ensure t
   :config
-  (ivy-mode)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (global-set-key "\C-s" 'swiper-isearch)
-  (global-set-key "\C-r" 'swiper-isearch-backward)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
 (use-package org-static-blog :ensure t ;; This config is specific to my website
   :config
   (setq org-static-blog-publish-title "Merazi's Webpage")
