@@ -48,7 +48,7 @@
 
 ;; use the modus operandi theme (i like it)
 (when (display-graphic-p)
-  (load-theme 'tango-dark t))
+  (load-theme 'doom-xcode t))
 
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
@@ -94,11 +94,26 @@
   '(progn (define-key dired-mode-map (kbd "M-o") 'other-window)
 	  (define-key dired-mode-map (kbd "\C-co") 'mer/xdg-open)))
 
-;; new window resizing
+;; easier window resizing
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
+;; don't send emacs to the background by mistake
+(global-unset-key (kbd "C-z"))
+
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-follow-mouse 't)
+(setq scroll-step 1)
+
+;; easier font size control
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+;;
 
 ;; eww (the web browser)
 (setq eww-download-directory "~/Downloads/"
@@ -126,12 +141,13 @@
 (setq-default org-adapt-indentation nil)
 
 ;; some packages
-(use-package vala-mode :ensure t)
+;; (use-package vala-mode :ensure t)
 (use-package vala-snippets :ensure t)
 (use-package skewer-mode :ensure t)
 (use-package doom-themes :ensure t)
 (use-package simple-modeline :ensure t)
 (use-package yasnippet-snippets :ensure t)
+(use-package impatient-mode :ensure t)
 ;;(use-package counsel :ensure t)
 (use-package org-present :ensure t)
 (use-package web-mode :ensure t
