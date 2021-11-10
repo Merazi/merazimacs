@@ -3,6 +3,13 @@
 ;; vanilla config go to: https://git.sr.ht/~meraz_1/vanilla-merazimacs
 
 ;; performance tweaks (from sanemacs)
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (add-hook 'after-init-hook #'(lambda ()
@@ -45,10 +52,6 @@
 (global-auto-revert-mode t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-
-;; use the modus operandi theme (i like it)
-(when (display-graphic-p)
-  (load-theme 'doom-xcode t))
 
 ;; lockfiles often create trouble
 (setq create-lockfiles nil)
@@ -113,8 +116,6 @@
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
-;;
-
 ;; eww (the web browser)
 (setq eww-download-directory "~/Downloads/"
       eww-desktop-remove-duplicates t
@@ -144,11 +145,13 @@
 ;; (use-package vala-mode :ensure t)
 (use-package vala-snippets :ensure t)
 (use-package skewer-mode :ensure t)
-(use-package doom-themes :ensure t)
+(use-package doom-themes :ensure t
+  :config
+  (load-theme 'doom-xcode t))
 (use-package simple-modeline :ensure t)
 (use-package yasnippet-snippets :ensure t)
 (use-package impatient-mode :ensure t)
-;;(use-package counsel :ensure t)
+(use-package counsel :ensure t)
 (use-package org-present :ensure t)
 (use-package web-mode :ensure t
   :config
