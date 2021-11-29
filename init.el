@@ -16,6 +16,12 @@
 			       ;; restore after startup
 			       (setq gc-cons-threshold 800000)))
 
+;; install use-package
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (add-to-list 'load-path "<path where use-package is installed>")
+  (require 'use-package))
+
 ;; increases garbage collection during startup
 ;; copied from: https://pastebin.com/mrPsnUas
 (setq startup/gc-cons-threshold gc-cons-threshold)
@@ -29,8 +35,8 @@
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 
-;; This is only needed once, near the top of the file
-(require 'use-package)
+;; set the global font
+(setq default-frame-alist '((font . "Cascadia Mono PL-10")))
 
 ;; display color emojis using a special font
 (set-fontset-font t '(#x1f000 . #x1faff)
@@ -142,12 +148,16 @@
 (setq-default org-adapt-indentation nil)
 
 ;; some packages
-;; (use-package vala-mode :ensure t)
-(use-package vala-snippets :ensure t)
+(use-package ox-reveal
+:ensure ox-reveal)
+(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+(setq org-reveal-mathjax t)
+(use-package htmlize
+:ensure t)
 (use-package skewer-mode :ensure t)
 (use-package doom-themes :ensure t
   :config
-  (load-theme 'doom-xcode t))
+  (load-theme 'doom-oceanic-next t))
 (use-package simple-modeline :ensure t)
 (use-package yasnippet-snippets :ensure t)
 (use-package impatient-mode :ensure t)
@@ -155,7 +165,10 @@
 (use-package org-present :ensure t)
 (use-package web-mode :ensure t
   :config
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.php?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.js?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode)))
 (use-package org-static-blog :ensure t ;; This config is specific to my website
   :config
   (setq org-static-blog-publish-title "Merazi's Webpage")
